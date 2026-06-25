@@ -45,21 +45,25 @@ function Login() {
         email,
         password,
       });
-     
 
       if (response.status) {
-        dispatch(
-          loginSuccess({
-            token: response.data.token,
+        const userData = {
+          token: response.data.token,
 
-            user: {
-              id: response.data.id,
-              name: response.data.name,
-              email: response.data.email,
-              role: response.data.role,
-            },
-          }),
-        );
+          user: {
+            id: response.data.id,
+            name: response.data.name,
+            email: response.data.email,
+            role: response.data.role,
+          },
+        };
+
+        localStorage.setItem("token", userData.token);
+
+        localStorage.setItem("user", JSON.stringify(userData.user));
+
+        dispatch(loginSuccess(userData));
+
         toast.success("Login berhasil!");
 
         navigate("/");
@@ -76,7 +80,6 @@ function Login() {
       setIsLoading(false); // 4. Buka kembali kunci tombol setelah proses selesai
     }
   };
-  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-100">

@@ -13,7 +13,7 @@ function Navbar() {
 
   return (
     <header className="bg-white shadow px-6 py-4 flex justify-between">
-      <h1 className="font-semibold text-lg">Employee Management System</h1>
+      <h1 className="font-semibold text-lg">Sistem Manajemen Karyawan</h1>
 
       <button
         onClick={handleLogout}

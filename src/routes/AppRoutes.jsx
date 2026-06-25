@@ -4,6 +4,7 @@ import Login from "../pages/auth/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
 import EmployeeList from "../pages/employees/EmployeeList";
 import ProtectedRoute from "./ProtectedRoute";
+import EmployeeCreateModal from "../components/modals/EmployeeCreateModal"
 
 function AppRoutes() {
   return (
@@ -24,6 +25,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <EmployeeList />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="../components/modals/EmployeeCreateModal"
+        element={
+          <ProtectedRoute>
+            <EmployeeCreateModal />
           </ProtectedRoute>
         }
       />
