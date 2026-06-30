@@ -7,15 +7,11 @@ const EmployeeTable = ({
   onEdit,
   onDetail,
 }) => {
-  if (!employees.length) {
-    return <p className="text-center">No employee found</p>;
-  }
-
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-x-auto border border-gray-100">
-      <table className="w-full whitespace-nowrap">
-        <thead>
-          <tr className="bg-gray-50 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+    <div className="overflow-auto max-h-[600px] rounded-lg shadow-sm">
+      <table className="w-full">
+        <thead className="sticky top-0 bg-gray-100 z-10">
+          <tr>
             <th className="p-4">No</th>
             <th className="p-4">Kode Karyawan</th>
             <th className="p-4">Nama Lengkap</th>
@@ -28,7 +24,13 @@ const EmployeeTable = ({
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
-          {employees.map((employee, index) => (
+          {!employees.length ? (
+            <tr>
+              <td colSpan="9" className="p-8 text-center text-gray-500">
+                Data karyawan tidak ditemukan
+              </td>
+            </tr>
+          ) : employees.map((employee, index) => (
             <tr
               key={employee.id}
               className="hover:bg-gray-50 transition-colors duration-200"

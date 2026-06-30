@@ -8,8 +8,8 @@ import {
 } from "../../store/slices/employeeSlice";
 
 import { getEmployees } from "../../api/employeeApi";
-import { getDepartments, getPositions } from "../../api/masterApi";
 import EmployeeTable from "../../components/tables/EmployeeTable";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import EmployeeCreateModal from "../../components/modals/EmployeeCreateModal";
 import MainLayout from "../../layouts/MainLayout";
 import EmployeeDeleteModal from "../../components/modals/EmployeeDeleteModal";
@@ -28,12 +28,9 @@ const EmployeeList = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [search, setSearch] = useState("");
-
-  const [departments, setDepartments] = useState([]);
-  const [positions, setPositions] = useState([]);
-
-  const [selectedDepartment, setSelectedDepartment] = useState("");
-  const [selectedPosition, setSelectedPosition] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [limit, setLimit] = useState(10);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -59,10 +56,9 @@ const EmployeeList = () => {
 
       const response = await getEmployees(
         currentPage,
-        auth.token,
-        search,
-        selectedDepartment,
-        selectedPosition,
+        limit,
+        debouncedSearch,
+        selectedStatus,
       );
 
       dispatch(setEmployees(response.data));
@@ -76,29 +72,19 @@ const EmployeeList = () => {
     }
   };
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+      setCurrentPage(1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
     if (auth.token) {
       fetchEmployees();
     }
-  }, [auth.token, currentPage, search, selectedDepartment, selectedPosition]);
-
-  useEffect(() => {
-    const fetchMasterData = async () => {
-      try {
-        const deptResponse = await getDepartments(auth.token);
-
-        const posResponse = await getPositions(auth.token);
-
-        setDepartments(deptResponse.data);
-        setPositions(posResponse.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (auth.token) {
-      fetchMasterData();
-    }
-  }, [auth.token]);
+  }, [auth.token, currentPage, limit, debouncedSearch, selectedStatus]);
 
   return (
     <MainLayout>
@@ -106,13 +92,30 @@ const EmployeeList = () => {
         <h1 className="text-2xl font-bold mb-5">Manajemen Karyawan</h1>
         {/* Search */}
         <div className="flex justify-between items-center mb-4">
-          <input
-            type="text"
-            placeholder="Cari karyawan..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="border rounded-lg px-3 py-2 w-80"
-          />
+          <div className="flex gap-4">
+            {/* Search */}
+            <input
+              type="text"
+              placeholder="Cari karyawan..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="border rounded-lg px-3 py-2 w-80"
+            />
+
+            {/* Filter Status */}
+            <select
+              value={selectedStatus}
+              onChange={(e) => {
+                setSelectedStatus(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="border rounded-lg px-3 py-2 w-48"
+            >
+              <option value="">Semua Status</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
 
           <button
             onClick={() => setShowCreateModal(true)}
@@ -120,35 +123,6 @@ const EmployeeList = () => {
           >
             + Tambah Karyawan
           </button>
-        </div>
-        <div className="flex gap-4 mb-4">
-          <select
-            value={selectedDepartment}
-            onChange={(e) => setSelectedDepartment(e.target.value)}
-            className="border rounded-lg px-3 py-2"
-          >
-            <option value="">Semua Departemen</option>
-
-            {departments.map((department, index) => (
-              <option key={index} value={department}>
-                {department}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={selectedPosition}
-            onChange={(e) => setSelectedPosition(e.target.value)}
-            className="border rounded-lg px-3 py-2"
-          >
-            <option value="">Semua Posisi</option>
-
-            {positions.map((position, index) => (
-              <option key={index} value={position}>
-                {position}
-              </option>
-            ))}
-          </select>
         </div>
         <div className="bg-white rounded-xl shadow-sm">
           {loading ? (
@@ -167,32 +141,54 @@ const EmployeeList = () => {
             />
           )}
         </div>
-        {/* Pagination */}
         {pagination && (
-          <div className="flex items-center justify-between mt-4">
-            <p className="text-sm text-gray-600">
-              Halaman {pagination.page} dari {pagination.totalPage}
-            </p>
+          <div className="flex items-center justify-between mt-6">
+            {/* Limit */}
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-600">Tampilkan</span>
 
+              <select
+                value={limit}
+                onChange={(e) => {
+                  setLimit(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
+                className="border rounded-lg px-2 py-1"
+              >
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+              </select>
+
+              <span className="text-sm text-gray-600">data</span>
+            </div>
+
+            {/* Info */}
+            <div className="text-sm text-gray-600">
+              Halaman {pagination.page} dari {pagination.totalPage}
+            </div>
+
+            {/* Button */}
             <div className="flex gap-2">
               <button
                 onClick={() => setCurrentPage(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="px-4 py-2 border rounded disabled:opacity-50"
+                className="border rounded-lg p-2 disabled:opacity-50 hover:bg-gray-100"
               >
-                Sebelumnya
+                <FaChevronLeft />
               </button>
 
               <button
                 onClick={() => setCurrentPage(currentPage + 1)}
                 disabled={currentPage === pagination.totalPage}
-                className="px-4 py-2 border rounded disabled:opacity-50"
+                className="border rounded-lg p-2 disabled:opacity-50 hover:bg-gray-100"
               >
-                Berikutnya
+                <FaChevronRight />
               </button>
             </div>
           </div>
-        )}
+        )}{" "}
       </div>
       {showCreateModal && (
         <EmployeeCreateModal
@@ -232,14 +228,14 @@ const EmployeeList = () => {
         />
       )}
       {showDetailModal && (
-  <EmployeeDetailModal
-    employee={selectedEmployee}
-    onClose={() => {
-      setShowDetailModal(false);
-      setSelectedEmployee(null);
-    }}
-  />
-)}
+        <EmployeeDetailModal
+          employee={selectedEmployee}
+          onClose={() => {
+            setShowDetailModal(false);
+            setSelectedEmployee(null);
+          }}
+        />
+      )}
     </MainLayout>
   );
 };

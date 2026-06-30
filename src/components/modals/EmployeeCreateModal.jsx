@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { FaCalendarAlt } from "react-icons/fa";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { id } from "date-fns/locale";
 
 import { getDepartments, getPositions } from "../../api/masterApi";
 import { createEmployee } from "../../api/employeeApi";
@@ -44,8 +48,8 @@ const EmployeeCreateModal = ({ onClose, onSuccess }) => {
   useEffect(() => {
     const fetchMasterData = async () => {
       try {
-        const deptResponse = await getDepartments(auth.token);
-        const posResponse = await getPositions(auth.token);
+        const deptResponse = await getDepartments();
+        const posResponse = await getPositions();
 
         setDepartments(deptResponse.data);
         setPositions(posResponse.data);
@@ -69,6 +73,22 @@ const EmployeeCreateModal = ({ onClose, onSuccess }) => {
       ...errors,
       [e.target.name]: "",
     });
+  };
+
+  const handleDateChange = (date, name) => {
+    if (!date) {
+      setFormData({ ...formData, [name]: "" });
+      return;
+    }
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    
+    setFormData({
+      ...formData,
+      [name]: `${year}-${month}-${day}`,
+    });
+    setErrors({ ...errors, [name]: "" });
   };
   const handleAddressChange = (e) => {
     setFormData({
@@ -129,27 +149,13 @@ const EmployeeCreateModal = ({ onClose, onSuccess }) => {
 
     const payload = {
       ...formData,
-
       salary: Number(formData.salary),
-
-      address: {
-        street: "",
-        city: "",
-        province: "",
-        postalCode: "",
-      },
-
-      emergencyContact: {
-        name: "",
-        relationship: "",
-        phoneNumber: "",
-      },
     };
 
     try {
       setSubmitting(true);
 
-      await createEmployee(payload, auth.token);
+      await createEmployee(payload);
 
       toast.success("Karyawan berhasil ditambahkan");
 
@@ -251,13 +257,21 @@ const EmployeeCreateModal = ({ onClose, onSuccess }) => {
             <div>
               <label className="block mb-1 font-medium">Tanggal Lahir</label>
 
-              <input
-                type="date"
-                name="birthDate"
-                value={formData.birthDate}
-                onChange={handleChange}
-                className="w-full border rounded-lg px-3 py-2"
-              />
+              <div className="relative">
+                <DatePicker
+                  selected={formData.birthDate ? new Date(formData.birthDate + "T00:00:00") : null}
+                  onChange={(date) => handleDateChange(date, "birthDate")}
+                  dateFormat="dd MMMM yyyy"
+                  locale={id}
+                  placeholderText="Pilih Tanggal Lahir"
+                  className="w-full border rounded-lg px-3 py-2 pr-10 appearance-none cursor-pointer hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none"
+                  wrapperClassName="w-full"
+                  showMonthDropdown
+                  showYearDropdown
+                  dropdownMode="select"
+                />
+                <FaCalendarAlt className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              </div>
             </div>
 
             <div>
@@ -299,15 +313,23 @@ const EmployeeCreateModal = ({ onClose, onSuccess }) => {
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Join Date</label>
+              <label className="block mb-1 font-medium">Tanggal Bergabung</label>
 
-              <input
-                type="date"
-                name="joinDate"
-                value={formData.joinDate}
-                onChange={handleChange}
-                className="w-full border rounded-lg px-3 py-2"
-              />
+              <div className="relative">
+                <DatePicker
+                  selected={formData.joinDate ? new Date(formData.joinDate + "T00:00:00") : null}
+                  onChange={(date) => handleDateChange(date, "joinDate")}
+                  dateFormat="dd MMMM yyyy"
+                  locale={id}
+                  placeholderText="Pilih Tanggal Bergabung"
+                  className="w-full border rounded-lg px-3 py-2 pr-10 appearance-none cursor-pointer hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none"
+                  wrapperClassName="w-full"
+                  showMonthDropdown
+                  showYearDropdown
+                  dropdownMode="select"
+                />
+                <FaCalendarAlt className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              </div>
             </div>
 
             <div>

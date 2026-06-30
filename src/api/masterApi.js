@@ -1,27 +1,13 @@
 import axiosInstance from "./axiosInstance";
 
-export const getDepartments = async (token) => {
-  const response = await axiosInstance.get(
-    "/api/master/departments",
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+export const getDepartments = async () => {
+  const response = await axiosInstance.get("/api/master/departments");
 
   return response.data;
 };
 
-export const getPositions = async (token) => {
-  const response = await axiosInstance.get(
-    "/api/master/positions",
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+export const getPositions = async () => {
+  const response = await axiosInstance.get("/api/master/positions");
 
   return response.data;
 };

@@ -2,68 +2,37 @@ import axiosInstance from "./axiosInstance";
 
 export const getEmployees = async (
   page = 1,
-  token,
+  limit = 10,
   search = "",
-  department = "",
-  position = "",
+  status = "",
 ) => {
   const response = await axiosInstance.get(
-    `/api/employees?page=${page}&search=${search}&department=${department}&position=${position}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
+    `/api/employees?page=${page}&limit=${limit}&search=${search}&status=${status}`
   );
 
   return response.data;
 };
 
-export const getEmployeeById = async (id, token) => {
-  const response = await axiosInstance.get(`/api/employees/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const createEmployee = async (payload) => {
+  const response = await axiosInstance.post("/api/employees", payload);
 
   return response.data;
 };
 
-export const createEmployee = async (payload, token) => {
-  const response = await axiosInstance.post("/api/employees", payload, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const updateEmployee = async (id, payload) => {
+  const response = await axiosInstance.put(`/api/employees/${id}`, payload);
 
   return response.data;
 };
 
-export const updateEmployee = async (id, payload, token) => {
-  const response = await axiosInstance.put(`/api/employees/${id}`, payload, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const deleteEmployee = async (id) => {
+  const response = await axiosInstance.delete(`/api/employees/${id}`);
 
   return response.data;
 };
 
-export const deleteEmployee = async (id, token) => {
-  const response = await axiosInstance.delete(`/api/employees/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return response.data;
-};
-export const detailEmployee = async (id, token) => {
-  const response = await axiosInstance.get(`/api/employees/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const detailEmployee = async (id) => {
+  const response = await axiosInstance.get(`/api/employees/${id}`);
 
   return response.data;
 };

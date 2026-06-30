@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { detailEmployee } from "../../api/employeeApi";
 import { FaSpinner } from "react-icons/fa";
+import { formatDateIndonesia } from "../../utils/formatDate";
 
 const EmployeeDetailModal = ({ employee, onClose }) => {
   const auth = useSelector((state) => state.auth);
@@ -14,10 +15,7 @@ const EmployeeDetailModal = ({ employee, onClose }) => {
       try {
         setLoading(true);
 
-        const response = await detailEmployee(
-          employee.id,
-          auth.token
-        );
+        const response = await detailEmployee(employee.id);
         setEmployeeDetail(response.data || response);
       } catch (error) {
         console.error(error);
@@ -104,7 +102,7 @@ const EmployeeDetailModal = ({ employee, onClose }) => {
             <label className="font-medium text-gray-600">
               Tanggal Lahir
             </label>
-            <p>{employee.birthDate}</p>
+            <p>{formatDateIndonesia(employee.birthDate)}</p>
           </div>
         </div>
 
@@ -132,7 +130,7 @@ const EmployeeDetailModal = ({ employee, onClose }) => {
             <label className="font-medium text-gray-600">
               Join Date
             </label>
-            <p>{employee.joinDate}</p>
+            <p>{formatDateIndonesia(employee.joinDate)}</p>
           </div>
 
           <div>

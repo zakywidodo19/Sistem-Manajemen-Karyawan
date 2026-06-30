@@ -20,10 +20,7 @@ const EmployeeDeleteModal = ({
     try {
       setLoading(true);
 
-      await deleteEmployee(
-        employee.id,
-        auth.token
-      );
+      await deleteEmployee(employee.id);
 
       toast.success(
         "Karyawan berhasil dihapus"
