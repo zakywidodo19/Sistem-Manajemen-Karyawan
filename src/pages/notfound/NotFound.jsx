@@ -10,7 +10,7 @@ const NotFound = () => {
         </h1>
 
         <h2 className="text-3xl font-semibold mt-4">
-          Halaman Tidak Ditemukan
+          Halaman Tidak Ditemukan Sekali
         </h2>
 
         <p className="text-gray-500 mt-2">
