@@ -32,7 +32,6 @@ const Dashboard = () => {
         // Karena response.data kadang langsung mengembalikan object
         // pastikan kita mengambil objek yang benar dari data
         setStats(data.data || data);
-        console.log(data, "statsSSSSSS");
       } catch (error) {
         console.error("Gagal mengambil data dashboard:", error);
       } finally {
