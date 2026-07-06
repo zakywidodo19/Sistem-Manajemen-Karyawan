@@ -1,110 +1,66 @@
-# Employee Management System
+# Sistem Manajemen Karyawan
 
-Frontend application for managing employee data built with **React.js**, **Tailwind CSS**, and **Redux Toolkit**.
-
----
-
-## 🚀 Features
-
-### 🔐 Authentication
-
-- Login with JWT Authentication
-- Protected Routes
-- Persistent Login Session
-- Auto Logout when token expired
-- Role-based Access Control (Admin & HR Manager)
-
-### 📊 Dashboard
-
-- Total Employee
-- Active Employee
-- Inactive Employee
-- Total Salary
-- Average Salary
-- Department Statistics Visualization
-
-### 👨‍💼 Employee Management
-
-- Employee List
-- Employee Detail
-- Create Employee
-- Edit Employee
-- Delete Employee
-- Search Employee
-- Filter by Department
-- Filter by Status
-- Sorting
-- Pagination
-
-### ⚠️ Error Handling
-
-- API Error Handling
-- Validation Error Handling
-- Unauthorized Access Handling (401)
-- Network Error Handling
-- Loading State
-- Empty State
-- Error State
+Aplikasi frontend untuk manajemen data karyawan yang dibangun menggunakan React, Vite, Tailwind CSS, dan Redux Toolkit. Aplikasi ini menyediakan fitur autentikasi, dashboard statistik, serta CRUD (Create, Read, Update, Delete) untuk data karyawan.
 
 ---
 
-## 🛠 Tech Stack
+## 🚀 Fitur Utama
 
-### Core Technologies
+- Autentikasi JWT (Login/Logout)
+- Proteksi route berdasarkan role (Admin, HR Manager)
+- Dashboard dengan statistik (total karyawan, aktif, non-aktif, total gaji, rata-rata gaji)
+- Visualisasi statistik departemen (menggunakan Recharts)
+- Manajemen karyawan: daftar, detail, tambah, edit, hapus
+- Pencarian, filter (departemen, status), pengurutan, dan paginasi
+- Penanganan error, loading, dan empty state
+- Notifikasi toast untuk operasi sukses/gagal
+- Axios interceptor untuk menangani 401 dan refresh token (jika diimplementasikan)
 
-- React.js
-- React Router DOM
+---
+
+## 🛠 Teknologi
+
+- React 19 + Vite
 - Tailwind CSS
-- Axios
-
-### State Management
-
 - Redux Toolkit
-
-### Form Handling
-
+- React Router DOM
 - React Hook Form
-
-### Data Fetching
-
-- TanStack Query (Optional)
-
-### Data Visualization
-
+- Axios
 - Recharts
+- React Toastify
 
 ---
 
-## 📦 Installation
+## 📦 Cara Menjalankan (Development)
 
-### Clone Repository
+1. Clone repository
 
 ```bash
-git clone https://github.com/your-username/employee-management.git
-cd employee-management
+git clone https://github.com/zakywidodo19/Sistem-Manajemen-Karyawan.git
+cd Sistem-Manajemen-Karyawan
 ```
 
-### Install Dependencies
+2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### Environment Variables
+3. Buat file environment
 
-Create `.env` file:
+Buat file `.env` di root (sesuaikan URL API Anda):
 
 ```env
-VITE_API_URL=https://YOUR_API_URL
+VITE_API_URL=https://API_YANG_DIGUNAKAN
 ```
 
-### Run Development Server
+4. Jalankan server development
 
 ```bash
 npm run dev
 ```
 
-### Build Production
+5. Build untuk production
 
 ```bash
 npm run build
@@ -112,298 +68,66 @@ npm run build
 
 ---
 
-## 🔐 Test Credentials
+## ⚙️ Script NPM
 
-### Admin
-
-| Email                                     | Password    |
-| ----------------------------------------- | ----------- |
-| [admin@gmail.com](mailto:admin@gmail.com) | Admin123456 |
-
-### HR Manager
-
-| Email                               | Password |
-| ----------------------------------- | -------- |
-| [hr@gmail.com](mailto:hr@gmail.com) | Hr123456 |
+- npm run dev — jalankan development server (Vite)
+- npm run build — build produksi
+- npm run preview — preview build produksi
+- npm run lint — jalankan ESLint
 
 ---
 
-## 🌐 API Endpoints
+## 🔐 Akun Tes (Contoh)
 
-### Authentication
+Gunakan kredensial ini hanya sebagai contoh jika backend mendukungnya:
 
-```http
-POST /api/auth/login
-```
+- Admin
+  - Email: admin@gmail.com
+  - Password: Admin123456
 
-### Dashboard
+- HR Manager
+  - Email: hr@gmail.com
+  - Password: Hr123456
 
-```http
-GET /api/dashboard
-GET /api/dashboard/departments
-```
-
-### Employee
-
-```http
-GET    /api/employees
-GET    /api/employees/:id
-POST   /api/employees
-PUT    /api/employees/:id
-DELETE /api/employees/:id
-```
+Jika aplikasi Anda menggunakan akun berbeda, sesuaikan bagian ini.
 
 ---
 
-## 🗂 State Management
+## 📁 Struktur Proyek (Singkat)
 
-This project uses **Redux Toolkit** to manage global application state.
-
-### Managed States
-
-- Authentication Token
-- Logged-in User Information
-- Employee Data
-- Dashboard Statistics
-- Global Loading State
-- Global Error State
-
-### Redux Structure
-
-```text
 src/
-└── store/
-    ├── index.js
-    ├── slices/
-    │   ├── authSlice.js
-    │   ├── employeeSlice.js
-    │   └── dashboardSlice.js
-    │
-    └── hooks/
-        ├── useAppDispatch.js
-        └── useAppSelector.js
-```
-
-### Benefits
-
-- Centralized State Management
-- Predictable State Updates
-- Easier Debugging
-- Scalable Architecture
-- Better Separation of Concerns
+├── api/ (axios instance & modul API)
+├── components/ (komponen UI, layout, form, table)
+├── pages/ (Login, Dashboard, EmployeeList, EmployeeDetail, Create/Edit)
+├── routes/ (ProtectedRoute, AppRoutes)
+├── store/ (Redux Toolkit slices & store)
+├── hooks/ (custom hooks)
+├── utils/ (helper & formatter)
+└── main.jsx, App.jsx
 
 ---
 
-## 📁 Project Structure
+## 🔗 Endpoint API (Contoh)
 
-```text
-src/
-│
-├── api/
-│   ├── axiosInstance.js
-│   ├── authApi.js
-│   ├── dashboardApi.js
-│   └── employeeApi.js
-│
-├── components/
-│   ├── common/
-│   ├── forms/
-│   ├── layout/
-│   ├── tables/
-│   └── charts/
-│
-├── pages/
-│   ├── auth/
-│   │   └── Login.jsx
-│   │
-│   ├── dashboard/
-│   │   └── Dashboard.jsx
-│   │
-│   └── employees/
-│       ├── EmployeeList.jsx
-│       ├── EmployeeDetail.jsx
-│       ├── CreateEmployee.jsx
-│       └── EditEmployee.jsx
-│
-├── routes/
-│   ├── ProtectedRoute.jsx
-│   └── AppRoutes.jsx
-│
-├── store/
-│   ├── index.js
-│   └── slices/
-│
-├── hooks/
-│
-├── utils/
-│
-├── App.jsx
-└── main.jsx
-```
+- POST /api/auth/login — login
+- GET /api/dashboard — data dashboard
+- GET /api/employees — daftar karyawan
+- GET /api/employees/:id — detail karyawan
+- POST /api/employees — buat karyawan
+- PUT /api/employees/:id — update karyawan
+- DELETE /api/employees/:id — hapus karyawan
+
+Sesuaikan path endpoint dengan backend yang Anda gunakan.
 
 ---
 
-## ⚠️ Error Handling
+## ✅ Catatan
 
-### Login Error
-
-Display error messages when:
-
-- Email or Password is incorrect
-- Server is unavailable
-- Request timeout occurs
-
-Example:
-
-```text
-Email or Password is incorrect
-```
-
----
-
-### Employee List
-
-Loading State:
-
-```text
-Loading employee data...
-```
-
-Empty State:
-
-```text
-No employee found
-```
-
-Error State:
-
-```text
-Failed to load employee data
-```
-
----
-
-### Create Employee
-
-Display validation messages returned by API.
-
-Example:
-
-```json
-{
-  "status": false,
-  "message": "Validation Error",
-  "errors": ["employeeCode is required", "email is required"]
-}
-```
-
----
-
-### Update Employee
-
-Success:
-
-```text
-Employee updated successfully
-```
-
-Failed:
-
-```text
-Failed to update employee
-```
-
----
-
-### Delete Employee
-
-Success:
-
-```text
-Employee deleted successfully
-```
-
-Failed:
-
-```text
-Failed to delete employee
-```
-
----
-
-### Unauthorized (401)
-
-When JWT token is invalid or expired:
-
-- Remove token from localStorage
-- Clear Redux Authentication State
-- Redirect user to Login Page
-
----
-
-### Network Error
-
-Example:
-
-```text
-Unable to connect to server. Please try again later.
-```
-
-Application must never display a blank screen or crash.
-
----
-
-## 🎯 Assessment Coverage
-
-### Functional (40%)
-
-✅ Authentication
-✅ Dashboard
-✅ Employee CRUD
-✅ API Integration
-✅ Error Handling
-
-### UI / UX (20%)
-
-✅ Responsive Design
-✅ Clean Layout
-✅ Consistent Components
-
-### Code Quality (20%)
-
-✅ Modular Architecture
-✅ Reusable Components
-✅ Clean Naming Convention
-✅ Feature-based Structure
-
-### State Management (10%)
-
-✅ Redux Toolkit
-✅ Centralized State
-✅ Predictable Data Flow
-
-### Git (10%)
-
-✅ Meaningful Commit Messages
-✅ Clean Repository Structure
-
----
-
-## ⭐ Bonus Features
-
-- Dark Mode
-- TanStack Query
-- Debounced Search
-- Skeleton Loading
-- Recharts Dashboard
-- Unit Testing
-- Custom Hooks
-- Toast Notifications
-- Axios Interceptor
-- Protected Routes
+- Periksa file `package.json` untuk melihat dependensi dan script.
+- Jika ada fitur tambahan (dark mode, TanStack Query, unit test), tambahkan dokumentasinya di README ini.
 
 ---
 
 ## 👨‍💻 Author
 
-Developed as part of the Frontend Developer Assessment using React.js, Tailwind CSS, Redux Toolkit, and REST API Integration.
+Dikembangkan oleh zakywidodo19 untuk aplikasi Sistem Manajemen Karyawan.
