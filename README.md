@@ -1,6 +1,6 @@
 # Sistem Manajemen Karyawan
 
-Aplikasi frontend untuk manajemen data karyawan yang dibangun menggunakan React, Vite, Tailwind CSS, dan Redux Toolkit. Aplikasi ini menyediakan fitur autentikasi, dashboard statistik, serta CRUD (Create, Read, Update, Delete) untuk data karyawan.
+Aplikasi frontend untuk manajemen data karyawan yang dibangun menggunakan React, Vite, Tailwind CSS, dan Redux Toolkit. Aplikasi ini menyediakan fitur autentikasi, dashboard statistik, CRUD karyawan, serta manajemen cuti dengan alur pengajuan dan persetujuan.
 
 ---
 
@@ -11,10 +11,22 @@ Aplikasi frontend untuk manajemen data karyawan yang dibangun menggunakan React,
 - Dashboard dengan statistik (total karyawan, aktif, non-aktif, total gaji, rata-rata gaji)
 - Visualisasi statistik departemen (menggunakan Recharts)
 - Manajemen karyawan: daftar, detail, tambah, edit, hapus
-- Pencarian, filter (departemen, status), pengurutan, dan paginasi
+- Manajemen cuti: pengajuan cuti, approval/reject, riwayat cuti, sisa cuti
+- Pencarian, filter (departemen, status, tipe cuti), pengurutan, dan paginasi
 - Penanganan error, loading, dan empty state
 - Notifikasi toast untuk operasi sukses/gagal
 - Axios interceptor untuk menangani 401 dan refresh token (jika diimplementasikan)
+
+---
+
+## ✈️ Fitur Cuti (Leave Management)
+
+- Pengguna dapat mengajukan cuti dengan memilih tipe (Tahunan, Sakit, Izin, dll.), rentang tanggal, dan keterangan
+- HR / Manager dapat melihat daftar pengajuan cuti dan melakukan Approve / Reject
+- Status cuti: Pending, Approved, Rejected, Cancelled
+- Riwayat cuti per karyawan dan laporan sisa cuti
+- Validasi tumpang tindih tanggal dan batasan sisa cuti
+- Upload lampiran (mis. surat sakit) pada pengajuan cuti
 
 ---
 
@@ -97,10 +109,24 @@ Jika aplikasi Anda menggunakan akun berbeda, sesuaikan bagian ini.
 
 src/
 ├── api/ (axios instance & modul API)
+│   ├── authApi.js
+│   ├── dashboardApi.js
+│   ├── employeeApi.js
+│   └── leaveApi.js  <-- modul API untuk cuti
 ├── components/ (komponen UI, layout, form, table)
-├── pages/ (Login, Dashboard, EmployeeList, EmployeeDetail, Create/Edit)
+├── pages/ (Login, Dashboard, EmployeeList, EmployeeDetail, Create/Edit, Leaves)
+│   └── leaves/
+│       ├── LeaveList.jsx
+│       ├── LeaveDetail.jsx
+│       ├── CreateLeave.jsx
+│       └── ApproveLeave.jsx
 ├── routes/ (ProtectedRoute, AppRoutes)
 ├── store/ (Redux Toolkit slices & store)
+│   └── slices/
+│       ├── authSlice.js
+│       ├── employeeSlice.js
+│       ├── dashboardSlice.js
+│       └── leaveSlice.js  <-- state untuk cuti
 ├── hooks/ (custom hooks)
 ├── utils/ (helper & formatter)
 └── main.jsx, App.jsx
@@ -117,7 +143,46 @@ src/
 - PUT /api/employees/:id — update karyawan
 - DELETE /api/employees/:id — hapus karyawan
 
+### Endpoint Cuti
+- GET    /api/leaves — daftar pengajuan cuti (filterable)
+- GET    /api/leaves/:id — detail pengajuan cuti
+- GET    /api/leaves/my — daftar pengajuan cuti milik pengguna saat ini
+- POST   /api/leaves — ajukan cuti (body termasuk tipe, startDate, endDate, reason, attachment)
+- PUT    /api/leaves/:id — update pengajuan (jika diizinkan)
+- DELETE /api/leaves/:id — batalkan pengajuan
+- POST   /api/leaves/:id/approve — approve pengajuan (role: HR/Manager)
+- POST   /api/leaves/:id/reject — reject pengajuan (role: HR/Manager)
+
 Sesuaikan path endpoint dengan backend yang Anda gunakan.
+
+---
+
+## 🗂 State Management (Redux)
+
+Slice tambahan untuk cuti:
+
+- leaveSlice.js
+  - State: list, detail, myLeaves, pendingApprovals, loading, error
+  - Actions: fetchLeaves, fetchLeaveById, createLeave, updateLeave, deleteLeave, approveLeave, rejectLeave
+
+### Managed States (ringkasan)
+
+- Authentication Token
+- Logged-in User Information
+- Employee Data
+- Dashboard Statistics
+- Leave Data & Approval Requests
+- Global Loading State
+- Global Error State
+
+---
+
+## ⚠️ Praktik & Catatan
+
+- Validasi sisi-klien untuk tanggal cuti (start <= end) dan batasan sisa cuti.
+- Cegah pengajuan tumpang tindih jika kebijakan mengharuskan.
+- Tampilkan notifikasi / toast saat pengajuan berhasil atau ditolak.
+- Untuk berkas lampiran, pastikan backend mendukung multipart/form-data.
 
 ---
 
