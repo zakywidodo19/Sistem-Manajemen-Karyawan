@@ -272,7 +272,7 @@ const EmployeeEditeModal = ({ employee, onClose, onSuccess }) => {
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Gender</label>
+              <label className="block mb-1 font-medium">Jenis Kelamin</label>
 
               <select
                 name="gender"
@@ -326,15 +326,14 @@ const EmployeeEditeModal = ({ employee, onClose, onSuccess }) => {
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Position</label>
-
+              <label className="block mb-1 font-medium">Posisi</label>
               <select
                 name="position"
                 value={formData.position}
                 onChange={handleChange}
                 className="w-full border rounded-lg px-3 py-2"
               >
-                <option value="">Pilih Position</option>
+                <option value="">Pilih Posisi</option>
 
                 {positions.map((position, index) => (
                   <option key={index} value={position}>
@@ -365,7 +364,7 @@ const EmployeeEditeModal = ({ employee, onClose, onSuccess }) => {
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Salary</label>
+              <label className="block mb-1 font-medium">Gaji</label>
 
               <input
                 type="number"

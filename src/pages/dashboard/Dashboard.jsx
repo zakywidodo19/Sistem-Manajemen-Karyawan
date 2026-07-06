@@ -10,6 +10,7 @@ import {
 
 import MainLayout from "../../layouts/MainLayout";
 import { getDashboardStats } from "../../api/dashboardApi";
+import { formatShortCurrency } from "../../utils/formatShortCurrency";
 
 const Dashboard = () => {
   const auth = useSelector((state) => state.auth);
@@ -95,7 +96,7 @@ const Dashboard = () => {
             <div>
               <p className="text-gray-500">Total Gaji</p>
               <h2 className="text-2xl font-bold mt-2 text-purple-600">
-                Rp {Number(stats.totalSalary || 0).toLocaleString("id-ID")}
+                {formatShortCurrency(stats.totalSalary)}
               </h2>
             </div>
 
@@ -106,7 +107,7 @@ const Dashboard = () => {
             <div>
               <p className="text-gray-500">Rata-rata Gaji</p>
               <h2 className="text-2xl font-bold mt-2 text-teal-600">
-                Rp {Number(stats.averageSalary || 0).toLocaleString("id-ID")}
+                {formatShortCurrency(stats.averageSalary)}
               </h2>
             </div>
 

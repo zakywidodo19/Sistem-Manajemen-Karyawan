@@ -5,6 +5,7 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import EmployeeList from "../pages/employees/EmployeeList";
 import ProtectedRoute from "./ProtectedRoute";
 import NotFound from "../pages/notfound/NotFound";
+import LeavePage from "../pages/leave/LeavePage";
 
 function AppRoutes() {
   return (
@@ -25,6 +26,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <EmployeeList />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/leave"
+        element={
+          <ProtectedRoute>
+            <LeavePage />
           </ProtectedRoute>
         }
       />

@@ -93,7 +93,7 @@ const EmployeeDetailModal = ({ employee, onClose }) => {
 
           <div>
             <label className="font-medium text-gray-600">
-              Gender
+              Jenis Kelamin
             </label>
             <p>{employee.gender}</p>
           </div>
@@ -121,21 +121,21 @@ const EmployeeDetailModal = ({ employee, onClose }) => {
 
           <div>
             <label className="font-medium text-gray-600">
-              Position
+              Posisi
             </label>
             <p>{employee.position}</p>
           </div>
 
           <div>
             <label className="font-medium text-gray-600">
-              Join Date
+              Tanggal Bergabung
             </label>
             <p>{formatDateIndonesia(employee.joinDate)}</p>
           </div>
 
           <div>
             <label className="font-medium text-gray-600">
-              Salary
+              Gaji
             </label>
             <p>
               Rp{" "}

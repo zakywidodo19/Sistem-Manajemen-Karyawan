@@ -8,13 +8,13 @@ import {
 } from "../../store/slices/employeeSlice";
 
 import { getEmployees } from "../../api/employeeApi";
-import EmployeeTable from "../../components/tables/EmployeeTable";
+import EmployeeTable from "../../components/employee/EmployeeTable";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import EmployeeCreateModal from "../../components/modals/EmployeeCreateModal";
+import EmployeeCreateModal from "../../components/employee/EmployeeCreateModal";
 import MainLayout from "../../layouts/MainLayout";
-import EmployeeDeleteModal from "../../components/modals/EmployeeDeleteModal";
-import EmployeeEditModal from "../../components/modals/EmployeeEditModal";
-import EmployeeDetailModal from "../../components/modals/EmployeeDetailModal";
+import EmployeeDeleteModal from "../../components/employee/EmployeeDeleteModal";
+import EmployeeEditModal from "../../components/employee/EmployeeEditModal";
+import EmployeeDetailModal from "../../components/employee/EmployeeDetailModal";
 
 const EmployeeList = () => {
   const dispatch = useDispatch();

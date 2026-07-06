@@ -1,19 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  employees: [],
+  requests: [],
   pagination: null,
   loading: false,
   error: null,
 };
 
-const employeeSlice = createSlice({
-  name: "employee",
+const leaveSlice = createSlice({
+  name: "leave",
+
   initialState,
 
   reducers: {
-    setEmployees: (state, action) => {
-      state.employees = action.payload;
+    setRequests: (state, action) => {
+      state.requests = action.payload;
     },
 
     setPagination: (state, action) => {
@@ -34,7 +35,12 @@ const employeeSlice = createSlice({
   },
 });
 
-export const { setEmployees, setPagination, setLoading, setError, clearError } =
-  employeeSlice.actions;
+export const {
+  setRequests,
+  setPagination,
+  setLoading,
+  setError,
+  clearError,
+} = leaveSlice.actions;
 
-export default employeeSlice.reducer;
+export default leaveSlice.reducer;
