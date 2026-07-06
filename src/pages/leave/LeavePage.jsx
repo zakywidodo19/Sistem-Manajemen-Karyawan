@@ -10,7 +10,7 @@ import ApprovalModal from "../../components/leave/ApprovalModal";
 import LeaveDetailModal from "../../components/leave/LeaveDetailModal";
 import { toast } from "react-toastify";
 import RejectModal from "../../components/leave/RejectModal";
-import LeaveFormModal from "../../components/leave/LeaveFormModal";
+import LeaveCreateModal from "../../components/leave/LeaveCreateModal";
 import { FiPlus } from "react-icons/fi";
 import LeaveToolbar from "../../components/leave/LeaveToolbar";
 import Pagination from "../../components/common/Pagination";
@@ -153,7 +153,7 @@ function LeavePage() {
           </button>
         </div>
 
-        <LeaveFormModal
+        <LeaveCreateModal
           isOpen={showFormModal}
           onClose={() => setShowFormModal(false)}
           onSuccess={fetchLeaveRequests}

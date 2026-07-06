@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { id } from "date-fns/locale";
 import "../../styles/datepicker.css"
 
-function LeaveFormModal({ isOpen, onClose, onSuccess }) {
+function LeaveCreateModal({ isOpen, onClose, onSuccess }) {
   const initialForm = {
     employeeId: "",
     type: "ANNUAL",
@@ -269,4 +269,4 @@ function LeaveFormModal({ isOpen, onClose, onSuccess }) {
   );
 }
 
-export default LeaveFormModal;
+export default LeaveCreateModal;
