@@ -8,6 +8,7 @@ function Sidebar() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken")
     localStorage.removeItem("user");
 
     dispatch(logout());

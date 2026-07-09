@@ -1,10 +1,14 @@
 import axios from "axios";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 import { store } from "../store";
 import { logout } from "../store/slices/authSlice";
 
-let isSessionExpired = false;
+import { shouldRefreshToken } from "../utils/token";
+
+// let isRefreshing = false;
+// let failedQueue = [];
+
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -12,6 +16,45 @@ const axiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
+// const processQueue = (error, token = null) => {
+//   failedQueue.forEach((promise) => {
+//     if (error) {
+//       promise.reject(error);
+//     } else {
+//       promise.resolve(token);
+//     }
+//   });
+
+//   failedQueue = [];
+// };
+
+// =======================
+// Refresh Access Token
+// =======================
+const refreshAccessToken = async () => {
+  const refreshToken = localStorage.getItem("refreshToken");
+
+  if (!refreshToken) {
+    throw new Error("Refresh token tidak ditemukan");
+  }
+
+  const response = await axios.post(
+    `${import.meta.env.VITE_API_URL}/api/auth/refresh`,
+    {
+      refreshToken,
+    },
+    {
+      timeout: 10000,
+    }
+  );
+
+  const { token, refreshToken: newRefreshToken } = response.data.data;
+
+  localStorage.setItem("token", token);
+  localStorage.setItem("refreshToken", newRefreshToken);
+
+  return token;
+};
 
 // =======================
 // Request Interceptor
@@ -26,35 +69,46 @@ axiosInstance.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error),
+  (error) => Promise.reject(error)
 );
 
 // =======================
 // Response Interceptor
 // =======================
-axiosInstance.interceptors.response.use(
-  (response) => response,
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    let token = localStorage.getItem("token");
 
-  (error) => {
-    const isLoginRequest = error.config?.url?.includes("/auth/login");
+    const isRefreshRequest = config.url?.includes("/auth/refresh");
+    const isLoginRequest = config.url?.includes("/auth/login");
 
+    // Jangan refresh ketika login atau refresh
     if (
-      error.response?.status === 401 &&
+      token &&
       !isLoginRequest &&
-      !isSessionExpired
+      !isRefreshRequest &&
+      shouldRefreshToken(token)
     ) {
-      isSessionExpired = true;
+      try {
+        token = await refreshAccessToken();
+      } catch (error) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("user");
 
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
+        store.dispatch(logout());
 
-      store.dispatch(logout());
-
-      toast.error("Sesi login telah berakhir. Silakan login kembali.");
+        return Promise.reject(error);
+      }
     }
 
-    return Promise.reject(error);
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
   },
+  (error) => Promise.reject(error)
 );
 
 export default axiosInstance;

@@ -45,7 +45,6 @@ function Login() {
         email,
         password,
       });
-
       if (response.status) {
         const userData = {
           token: response.data.token,
@@ -58,7 +57,9 @@ function Login() {
           },
         };
 
-        localStorage.setItem("token", userData.token);
+        localStorage.setItem("token", response.data.token);
+
+        localStorage.setItem("refreshToken", response.data.refreshToken);
 
         localStorage.setItem("user", JSON.stringify(userData.user));
 
