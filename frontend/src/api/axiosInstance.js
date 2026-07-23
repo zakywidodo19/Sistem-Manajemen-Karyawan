@@ -39,7 +39,7 @@ const refreshAccessToken = async () => {
   }
 
   const response = await axios.post(
-    `${import.meta.env.VITE_API_URL}/api/auth/refresh`,
+    `${API_URL}/api/auth/refresh`,
     {
       refreshToken,
     },
