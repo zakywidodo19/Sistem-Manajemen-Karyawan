@@ -7,10 +7,12 @@ export const shouldRefreshToken = (token) => {
 
   try {
     const { exp } = jwtDecode(token);
-
     const now = Math.floor(Date.now() / 1000);
+    const timeLeft = exp - now;
 
-    return exp - now <= REFRESH_THRESHOLD;
+    console.log(`⏱️ [Token Check] Sisa masa berlaku token: ${timeLeft} detik`);
+
+    return timeLeft <= REFRESH_THRESHOLD;
   } catch (error) {
     return true;
   }
