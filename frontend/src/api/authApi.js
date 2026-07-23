@@ -1,7 +1,11 @@
 import axios from "axios";
 import axiosInstance from "./axiosInstance";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+let rawApiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+if (rawApiUrl && !rawApiUrl.startsWith("http://") && !rawApiUrl.startsWith("https://")) {
+  rawApiUrl = `https://${rawApiUrl}`;
+}
+const API_URL = rawApiUrl;
 
 const refreshClient = axios.create({
   baseURL: API_URL,

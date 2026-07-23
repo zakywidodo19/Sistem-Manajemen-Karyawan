@@ -10,8 +10,14 @@ import { shouldRefreshToken } from "../utils/token";
 // let failedQueue = [];
 
 
+let rawApiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+if (rawApiUrl && !rawApiUrl.startsWith("http://") && !rawApiUrl.startsWith("https://")) {
+  rawApiUrl = `https://${rawApiUrl}`;
+}
+const API_URL = rawApiUrl;
+
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
   },
