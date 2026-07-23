@@ -4,6 +4,9 @@ const jwt = require("jsonwebtoken");
 const swaggerUi = require("swagger-ui-express");
 require("dotenv").config();
 
+const JWT_SECRET = process.env.JWT_SECRET || "super_secret_jwt_key_default_123";
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || "super_secret_jwt_refresh_key_default_123";
+
 const employees = require("./employees");
 const authMiddleware = require("./middleware/auth");
 const swaggerSpec = require("./swagger");
@@ -109,9 +112,9 @@ app.post("/api/auth/login", (req, res) => {
       email: user.email,
       role: user.role,
     },
-    process.env.JWT_SECRET,
+    JWT_SECRET,
     {
-      expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "2m",
+      expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1d",
     },
   );
 
@@ -121,9 +124,9 @@ app.post("/api/auth/login", (req, res) => {
       email: user.email,
       role: user.role,
     },
-    process.env.JWT_REFRESH_SECRET || `${process.env.JWT_SECRET}_refresh`,
+    JWT_REFRESH_SECRET,
     {
-      expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "1d",
+      expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
     },
   );
 
@@ -179,9 +182,7 @@ app.post("/api/auth/refresh", (req, res) => {
   }
 
   try {
-    const refreshSecret =
-      process.env.JWT_REFRESH_SECRET || `${process.env.JWT_SECRET}_refresh`;
-    const decoded = jwt.verify(refreshToken, refreshSecret);
+    const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET);
 
     const user = users.find((u) => u.id === decoded.id);
     if (!user) {
@@ -197,9 +198,9 @@ app.post("/api/auth/refresh", (req, res) => {
         email: user.email,
         role: user.role,
       },
-      process.env.JWT_SECRET,
+      JWT_SECRET,
       {
-        expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "2m",
+        expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1d",
       },
     );
 
@@ -209,9 +210,9 @@ app.post("/api/auth/refresh", (req, res) => {
         email: user.email,
         role: user.role,
       },
-      refreshSecret,
+      JWT_REFRESH_SECRET,
       {
-        expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "1d",
+        expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
       },
     );
 

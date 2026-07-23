@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 
+const JWT_SECRET = process.env.JWT_SECRET || "super_secret_jwt_key_default_123";
+
 module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -13,7 +15,7 @@ module.exports = (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    jwt.verify(token, process.env.JWT_SECRET);
+    jwt.verify(token, JWT_SECRET);
 
     next();
   } catch {
