@@ -33,16 +33,18 @@ const users = [
 
 const app = express();
 
-const corsOptions = {
-  origin: "*",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-  allowedHeaders: ["Content-Type", "Authorization"],
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-};
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH, HEAD");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
 
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
