@@ -930,7 +930,22 @@ app.put("/api/leave/:id/cancel", authMiddleware, async (req, res) => {
   }
 });
 
+const { execSync } = require("child_process");
+
+async function initDatabase() {
+  try {
+    console.log("Running Prisma db push...");
+    execSync("npx prisma db push --accept-data-loss", { stdio: "inherit" });
+    console.log("Running Prisma seed...");
+    execSync("node prisma/seed.js", { stdio: "inherit" });
+    console.log("Database setup complete!");
+  } catch (error) {
+    console.error("Database setup warning:", error.message);
+  }
+}
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on http://0.0.0.0:${PORT}`);
+  initDatabase();
 });
