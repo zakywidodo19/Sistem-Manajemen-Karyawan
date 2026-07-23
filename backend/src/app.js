@@ -114,7 +114,7 @@ app.post("/api/auth/login", (req, res) => {
     },
     JWT_SECRET,
     {
-      expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1d",
+      expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1m",
     },
   );
 
@@ -126,7 +126,7 @@ app.post("/api/auth/login", (req, res) => {
     },
     JWT_REFRESH_SECRET,
     {
-      expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
+      expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "3m",
     },
   );
 
@@ -200,7 +200,7 @@ app.post("/api/auth/refresh", (req, res) => {
       },
       JWT_SECRET,
       {
-        expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1d",
+        expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1m",
       },
     );
 
@@ -212,7 +212,7 @@ app.post("/api/auth/refresh", (req, res) => {
       },
       JWT_REFRESH_SECRET,
       {
-        expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
+        expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "3m",
       },
     );
 
